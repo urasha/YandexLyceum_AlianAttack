@@ -22,7 +22,7 @@ class Enemy(pygame.sprite.Sprite):
         self.dy = 0
         self.rect = self.image.get_rect()
         self.rect.x = 0
-        self.rect.y = random.randrange(330, 355)
+        self.rect.y = random.randrange(330, 348)
 
         self.control_positions = {
             (252, self.rect.y): (0, self.dx, -90),
