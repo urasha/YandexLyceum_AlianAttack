@@ -74,9 +74,11 @@ if __name__ == '__main__':
                     Enemy(numpy.random.choice(enemy_names, 1, [0.3, 0.7])[0])
 
         # поворот турелей к врагам
-        for i in turret_group:
-            i.rotate()
+        if enemy_group:
+            for i in turret_group:
+                i.rotate()
 
+        # движение врагов
         for i in enemy_group:
             i.check_position()
             i.move_enemy()
