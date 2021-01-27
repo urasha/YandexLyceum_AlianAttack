@@ -3,8 +3,11 @@ from technical_func import load_image
 
 
 def start_menu(surface):
-    TEXT_SPACING = 20
-    RIGHT_INDENT = 235
+    """
+    Показ основного меню
+    """
+    TEXT_SPACING = 35
+    RIGHT_INDENT = 380
 
     intro_text = ["Начать",
                   "Правила игры",
@@ -13,13 +16,13 @@ def start_menu(surface):
     font_text = pygame.font.Font(None, 75)
     font_name = pygame.font.Font(None, 45)
 
-    bg = pygame.transform.scale(load_image('bg.jpg'), (750, 600))
+    bg = pygame.transform.scale(load_image('bg.jpg'), (1000, 600))
 
     name = font_text.render("Alian attack", True, (200, 50, 0))
 
     arrow = load_image('arrow.png')
     arrow = pygame.transform.scale(arrow, (70, 35))
-    y_arr = 205
+    y_arr = 220
     counter_arr = 0
 
     while True:
@@ -52,12 +55,15 @@ def start_menu(surface):
             text_coord += intro_rect.height
             surface.blit(string_rendered, intro_rect)
         surface.blit(name, (RIGHT_INDENT, 120))
-        surface.blit(arrow, (RIGHT_INDENT - 75, y_arr + 50 * counter_arr))
+        surface.blit(arrow, (RIGHT_INDENT - 75, y_arr + 65 * counter_arr))
 
         pygame.display.flip()
 
 
 def start_rules(surface):
+    """
+    Показ правил
+    """
     TEXT_SPACING = 20
     RIGHT_INDENT = 25
 
@@ -69,7 +75,7 @@ def start_rules(surface):
 
     font = pygame.font.Font(None, 27)
 
-    bg = pygame.transform.scale(load_image('bg.jpg'), (750, 600))
+    bg = pygame.transform.scale(load_image('bg.jpg'), (1000, 600))
     surface.blit(bg, (0, 0))
 
     text_coord = 150

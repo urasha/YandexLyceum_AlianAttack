@@ -2,9 +2,9 @@ from technical_func import load_image
 import pygame
 
 tile_images = {
-    'grass': load_image('towerDefense_tile024.png'),
-    'trail': load_image('towerDefense_tile158.png'),
-    'base': load_image('towerDefense_tile044.png'),
+    'grass': load_image('grass.png'),
+    'trail': load_image('trail.png'),
+    'base': load_image('turret_base.png'),
 }
 TILE_WIDTH = TILE_HEIGHT = 50
 tiles_group = pygame.sprite.Group()
