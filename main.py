@@ -73,7 +73,7 @@ if __name__ == '__main__':
     turret_names = ['laser', 'bullet', 'rocket']
     active_type = 1
 
-    time_before_start = 1
+    time_before_start = 30
     time_after_start = 145
     pygame.time.set_timer(COUNT_TIME, 1000)
 
