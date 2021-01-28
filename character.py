@@ -15,7 +15,7 @@ enemy_images = {
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, enemy_type):
         super().__init__(enemy_group)
-        self.ORIG_HP = 20 if enemy_type == 'sprinter' else 30
+        self.ORIG_HP = 25 if enemy_type == 'sprinter' else 35
         self.hp = self.ORIG_HP
         self.award = 10 if enemy_type == 'sprinter' else 6
         self.image = enemy_images[enemy_type]
@@ -27,19 +27,19 @@ class Enemy(pygame.sprite.Sprite):
         self.dx = 3 if enemy_type == 'sprinter' else 2
         self.dy = 0
         self.control_positions = {
-            (252, self.rect.y): (0, self.dx, -90),
-            (252, self.rect.y + 66): (self.dx, 0, 0),
-            (504, self.rect.y + 66): (0, self.dx, -90),
-            (504, self.rect.y + 108): (self.dx, 0, 0),
-            (762, self.rect.y + 108): (0, -self.dx, 90),
-            (762, self.rect.y): (-self.dx, 0, 180),
-            (714, self.rect.y): (0, -self.dx, 90),
-            (714, self.rect.y - 66): (-self.dx, 0, 180),
-            (600, self.rect.y - 66): (0, -self.dx, 90),
-            (600, self.rect.y - 114): (-self.dx, 0, 180),
-            (306, self.rect.y - 114): (0, -self.dx, 90),
-            (306, self.rect.y - 240): (self.dx, 0, 0),
-            (1001, self.rect.y - 240): (self.dx, 0, 0)
+            (self.rect.x + 252, self.rect.y): (0, self.dx, -90),
+            (self.rect.x + 252, self.rect.y + 66): (self.dx, 0, 0),
+            (self.rect.x + 504, self.rect.y + 66): (0, self.dx, -90),
+            (self.rect.x + 504, self.rect.y + 108): (self.dx, 0, 0),
+            (self.rect.x + 762, self.rect.y + 108): (0, -self.dx, 90),
+            (self.rect.x + 762, self.rect.y): (-self.dx, 0, 180),
+            (self.rect.x + 714, self.rect.y): (0, -self.dx, 90),
+            (self.rect.x + 714, self.rect.y - 66): (-self.dx, 0, 180),
+            (self.rect.x + 600, self.rect.y - 66): (0, -self.dx, 90),
+            (self.rect.x + 600, self.rect.y - 114): (-self.dx, 0, 180),
+            (self.rect.x + 306, self.rect.y - 114): (0, -self.dx, 90),
+            (self.rect.x + 306, self.rect.y - 240): (self.dx, 0, 0),
+            (self.rect.x + 1001, self.rect.y - 240): (self.dx, 0, 0)
         }  # костыль - ПОТОМ МБ ИСПРАВИТЬ
         self.counter_pos = 0
 
@@ -80,5 +80,5 @@ class Enemy(pygame.sprite.Sprite):
     def draw_hp_bar(self, screen):
         """Отрисовка уровня здоровья врагов"""
         x, y, w, h = self.rect
-        pygame.draw.rect(screen, 'red', (x, y + 2, 100 * self.hp / self.ORIG_HP // 2, h * 0.1))
+        pygame.draw.rect(screen, 'red', (x, y + 5, 100 * self.hp / self.ORIG_HP // 2, h * 0.07))
 

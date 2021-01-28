@@ -15,6 +15,10 @@ turret_images = {
 }
 shooting_events = {}
 
+# звук
+
+sound3 = pygame.mixer.Sound('sounds/bullet_sound.wav')
+
 
 def get_cell(height, width, mouse_pos):
     """
@@ -30,19 +34,18 @@ def get_cell(height, width, mouse_pos):
                 return i, j
 
 
-def check_shooting(t_type, screen):
-    """Проверка на необзодимость выстрела"""
+def check_shooting(t_type):
+    """Проверка на необходимость выстрела"""
     for t in [i for i in turret_group if i.t_type == t_type]:
         try:
-            enemy = t.check_area(screen)[2]
+            enemy = t.check_area()[2]
         except Exception:
             continue
+        t.sound.play()
         enemy.take_damage(t.damage)
 
 
 class Turret(pygame.sprite.Sprite):
-    counter = 0
-
     def __init__(self, pos_x, pos_y, turret_type):
         super().__init__(turret_group)
         self.t_type = turret_type
@@ -50,9 +53,13 @@ class Turret(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (WIDTH, HEIGHT))
         self.original_image = self.image
         self.rect = self.image.get_rect().move(TILE_WIDTH * pos_y, TILE_WIDTH * pos_x - 5)
-
         self.radius = None
-        self.counter += 1
+        if turret_type == 'bullet':
+            self.counter = 4
+        elif turret_type == 'rocket':
+            self.counter = 5
+        else:
+            self.counter = 6
 
         shooting_events[pygame.USEREVENT + self.counter] = self.t_type
 
@@ -69,15 +76,13 @@ class Turret(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.original_image, -angle - 90)
         self.rect = self.image.get_rect(center=self.rect.center)
 
-    def check_area(self, screen):
+    def check_area(self):
         """
         Проверка на нахождение врагов в радиусе действия
         """
         x, y, w, h = self.rect
         turret_center = [x + w // 2, y + h // 2]
         sprites = enemy_group.sprites()
-
-        pygame.draw.circle(screen, 'red', turret_center, self.radius, 2)
 
         for i in sprites:
             if self._distance(turret_center[0], turret_center[1], i.rect.x, i.rect.y) <= self.radius:
@@ -92,18 +97,22 @@ class Turret(pygame.sprite.Sprite):
 class BulletTurret(Turret):
     def __init__(self, pos_x, pos_y, turret_type):
         super().__init__(pos_x, pos_y, turret_type)
-        self.radius = 115
+        self.radius = 100
         self.price = 70
-        self.damage = 2
-        pygame.time.set_timer(pygame.USEREVENT + self.counter, 100)
+        self.damage = 3
+        self.sound = pygame.mixer.Sound('sounds/bullet_sound.wav')
+        self.sound.set_volume(0.2)
+        pygame.time.set_timer(pygame.USEREVENT + self.counter, 125)
 
 
 class RocketTurret(Turret):
     def __init__(self, pos_x, pos_y, turret_type):
         super().__init__(pos_x, pos_y, turret_type)
         self.radius = 150
-        self.price = 100
-        self.damage = 8
+        self.price = 120
+        self.damage = 7
+        self.sound = pygame.mixer.Sound('sounds/rocket_sound.wav')
+        self.sound.set_volume(0.3)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 450)
 
 
@@ -111,6 +120,8 @@ class LaserTurret(Turret):
     def __init__(self, pos_x, pos_y, turret_type):
         super().__init__(pos_x, pos_y, turret_type)
         self.radius = 160
-        self.price = 70
-        self.damage = 1
+        self.price = 120
+        self.damage = 2
+        self.sound = pygame.mixer.Sound('sounds/laser_sound.wav')
+        self.sound.set_volume(0.5)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 50)

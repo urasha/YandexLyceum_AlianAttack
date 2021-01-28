@@ -16,7 +16,7 @@ def start_menu(surface):
     font_text = pygame.font.Font(None, 75)
     font_name = pygame.font.Font(None, 45)
 
-    bg = pygame.transform.scale(load_image('bg.jpg'), (1000, 600))
+    bg = pygame.transform.scale(load_image('bg.jpg'), (1000, 700))
 
     name = font_text.render("Alian attack", True, (200, 50, 0))
 
@@ -54,7 +54,7 @@ def start_menu(surface):
             intro_rect.x = RIGHT_INDENT
             text_coord += intro_rect.height
             surface.blit(string_rendered, intro_rect)
-        surface.blit(name, (RIGHT_INDENT, 120))
+        surface.blit(name, (RIGHT_INDENT - 10, 110))
         surface.blit(arrow, (RIGHT_INDENT - 75, y_arr + 65 * counter_arr))
 
         pygame.display.flip()
@@ -71,11 +71,12 @@ def start_rules(surface):
                   'Башни будут атаковать приходящих монстров.',
                   'При смерти монстры будут давать вам деньги, чтобы покупать новые башни.',
                   'Башни можно установить только на специальных зонах с квадратами.',
-                  'ГЛАВНОЕ, ЧТОБЫ МОНСТРЫ НЕ ПРОШЛИ В ПОРТАЛ СНИЗУ!']
+                  'ГЛАВНОЕ, ЧТОБЫ МОНСТРЫ НЕ ПРОШЛИ К ВАМ НА БАЗУ!',
+                  'Для этого нужно продержаться 2 минуты, удачи']
 
     font = pygame.font.Font(None, 27)
 
-    bg = pygame.transform.scale(load_image('bg.jpg'), (1000, 600))
+    bg = pygame.transform.scale(load_image('bg.jpg'), (1000, 700))
     surface.blit(bg, (0, 0))
 
     text_coord = 150

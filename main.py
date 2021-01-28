@@ -4,10 +4,11 @@ from ground import Tile, tiles_group
 from technical_func import load_image, load_level, generate_level
 from menu import start_menu
 from turret import turret_group, Turret, BulletTurret, LaserTurret, RocketTurret, \
-    get_cell, check_shooting, shooting_events
+    get_cell, check_shooting, shooting_events, turret_images
 import math
 from character import enemy_group, Enemy
-import numpy
+import random
+import secrets
 
 
 def terminate():
@@ -15,14 +16,33 @@ def terminate():
     sys.exit()
 
 
+def check_game_state(param, text):
+    if param <= 0:
+        pygame.mixer.music.fadeout(500)
+        surf = pygame.Surface((1000, 700))
+        surf.fill('black')
+        surf.set_alpha(200)
+        screen.blit(surf, (0, 0))
+        screen.blit(font_1.render(text, True, (150, 150, 255)), (290, 250))
+        pygame.display.flip()
+        pygame.time.wait(2000)
+        terminate()
+
+
 if __name__ == '__main__':
     pygame.init()
     pygame.font.init()
 
-    font = pygame.font.Font(None, 75)
+    font_1 = pygame.font.Font(None, 75)
+    font_2 = pygame.font.Font(None, 40)
+    font_3 = pygame.font.Font(None, 35)
 
-    screen = pygame.display.set_mode((1000, 600))
-    pygame.display.set_caption('VLDtower')
+    screen = pygame.display.set_mode((1000, 700))
+    pygame.display.set_caption('VLDTower')
+
+    pygame.mixer.music.load('sounds/music.mp3')
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play(loops=-1)
 
     start_menu(screen)
     screen.fill((0, 0, 0))
@@ -32,22 +52,67 @@ if __name__ == '__main__':
     generate_level(lvl, Tile)
 
     FPS = 60
+    SPAWN_GROUP = pygame.USEREVENT + 1
+    COUNT_TIME = pygame.USEREVENT + 2
+    SPAWN_ENEMY = pygame.USEREVENT + 3
 
-    player_money = 320
+    player_money = 235
+    money_image = load_image('money.jpg')
+    money_image.set_colorkey((255, 255, 255))
+    money_image = pygame.transform.scale(money_image, (100, 100))
+
     base_hp = 5
+    base_image = load_image('heart.png')
+    base_image = pygame.transform.scale(base_image, (80, 60))
+
+    bullet_turret = pygame.transform.scale(turret_images['bullet'], (60, 75))
+    laser_turret = pygame.transform.scale(turret_images['laser'], (60, 75))
+    rocket_turret = pygame.transform.scale(turret_images['rocket'], (60, 75))
 
     turret_types = [LaserTurret, BulletTurret, RocketTurret]
     turret_names = ['laser', 'bullet', 'rocket']
     active_type = 1
 
-    enemy_names = ['sprinter', 'usual']
+    time_before_start = 1
+    time_after_start = 145
+    pygame.time.set_timer(COUNT_TIME, 1000)
 
+    counter_spawn = 0
     clock = pygame.time.Clock()
     while True:
+
         # отрисовка спрайтов
         tiles_group.draw(screen)
         turret_group.draw(screen)
         enemy_group.draw(screen)
+
+        if time_before_start > 0:
+            screen.blit(font_2.render(f'До начала: {time_before_start} сек', True, 'black'), (20, 20))
+            pygame.time.set_timer(SPAWN_GROUP, 6500)
+
+        elif 145 >= time_after_start > -1:
+            screen.blit(font_2.render(f'Осталось: {time_after_start} сек', True, 'black'), (20, 20))
+
+        # здоровье базы
+        screen.blit(base_image, (60, 600))
+        screen.blit(font_1.render(str(base_hp), True,  (30, 30, 30)), (135, 610))
+
+        # кол-во денег
+        screen.blit(money_image, (760, 580))
+        screen.blit(font_1.render(str(player_money), True, (30, 30, 30)), (855, 610))
+
+        # цены турелей
+        screen.blit(font_3.render('$120', True, 'black'), (315, 630))
+        screen.blit(font_3.render('$70', True, 'black'), (490, 630))
+        screen.blit(font_3.render('$120', True, 'black'), (655, 630))
+
+        screen.blit(laser_turret, (250, 600))
+        screen.blit(bullet_turret, (420, 600))
+        screen.blit(rocket_turret, (590, 600))
+        pygame.draw.rect(screen, 'black', (225, 595, 510, 85), 2)
+        pygame.draw.rect(screen, 'red', (225 + 170 * active_type, 595, 171, 85), 4)
+        pygame.draw.line(screen, 'black', (395, 595), (395, 680), 2)
+        pygame.draw.line(screen, 'black', (565, 595), (565, 680), 2)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -63,7 +128,7 @@ if __name__ == '__main__':
                             line = ' '.join(lvl[coord[0]]).split()
                             line[coord[1]] = '?'
                             lvl[coord[0]] = ''.join(line)
-                        else:   
+                        else:
                             turret_group.remove(turret)  # нет денег - нет турели
 
             # смена турелей
@@ -74,27 +139,38 @@ if __name__ == '__main__':
                     active_type = 1
                 elif event.key == pygame.K_3:
                     active_type = 2
-                elif event.key == pygame.K_SPACE:
-                    Enemy(numpy.random.choice(enemy_names, 1, [0.3, 0.7])[0])
                 elif event.key == pygame.K_ESCAPE:
                     start_menu(screen)
+
+            if event.type == COUNT_TIME:
+                time_before_start -= 1
+                time_after_start -= 1
+
+            if event.type == SPAWN_GROUP:
+                counter_spawn = random.randint(3, 8 if pygame.time.get_ticks() > 30000 else 6)
+                pygame.time.set_timer(SPAWN_ENEMY, 2000 // counter_spawn)
+
+            if event.type == SPAWN_ENEMY:
+                if counter_spawn > 0:
+                    chance_sprinter = 25 if pygame.time.get_ticks() < 60000 else 35
+                    Enemy('sprinter' if secrets.randbelow(100) < chance_sprinter else 'usual')
+                    counter_spawn -= 1
 
             # события стрельбы
             for j in shooting_events:
                 if j == event.type:
-                    check_shooting(shooting_events[j], screen)
+                    check_shooting(shooting_events[j])
 
-        if base_hp <= 0:
-            surf = pygame.Surface((1000, 600))
-            surf.fill('black')
-            surf.set_alpha(200)
-            screen.blit(surf, (0, 0))
-            screen.blit(font.render('Игра окончена', True, (150, 150, 255)), (290, 250))
+        # проверка на проигрыш
+        check_game_state(base_hp, 'Поражение')
+
+        # проверка на победу
+        check_game_state(time_after_start, 'Вы победили!')
 
         # поворот турелей к врагам
         for i in turret_group:
             try:
-                x, y, enemy = i.check_area(screen)
+                x, y, enemy = i.check_area()
             except Exception:
                 continue
             i.rotate((x, y))
@@ -104,7 +180,7 @@ if __name__ == '__main__':
                 enemy_group.remove(enemy)
                 player_money += enemy.award
 
-        # движение врагов; отрисовка hp
+        # движение врагов
         for i in enemy_group:
             base_hp -= i.change_position()
             i.move_enemy()
