@@ -15,10 +15,6 @@ turret_images = {
 }
 shooting_events = {}
 
-# звук
-
-sound3 = pygame.mixer.Sound('sounds/bullet_sound.wav')
-
 
 def get_cell(height, width, mouse_pos):
     """
@@ -60,7 +56,6 @@ class Turret(pygame.sprite.Sprite):
             self.counter = 5
         else:
             self.counter = 6
-
         shooting_events[pygame.USEREVENT + self.counter] = self.t_type
 
     def rotate(self, xy):
@@ -93,6 +88,13 @@ class Turret(pygame.sprite.Sprite):
         """Определение расстояния от врага до турели"""
         return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
+    @staticmethod
+    def play_base_sound():
+        """Проигрывание звука установки турели"""
+        base_sound = pygame.mixer.Sound('sounds/base_sound.wav')
+        base_sound.set_volume(0.5)
+        base_sound.play()
+
 
 class BulletTurret(Turret):
     def __init__(self, pos_x, pos_y, turret_type):
@@ -124,4 +126,4 @@ class LaserTurret(Turret):
         self.damage = 2
         self.sound = pygame.mixer.Sound('sounds/laser_sound.wav')
         self.sound.set_volume(0.5)
-        pygame.time.set_timer(pygame.USEREVENT + self.counter, 50)
+        pygame.time.set_timer(pygame.USEREVENT + self.counter, 80)

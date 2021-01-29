@@ -56,7 +56,7 @@ if __name__ == '__main__':
     COUNT_TIME = pygame.USEREVENT + 2
     SPAWN_ENEMY = pygame.USEREVENT + 3
 
-    player_money = 235
+    player_money = 170
     money_image = load_image('money.jpg')
     money_image.set_colorkey((255, 255, 255))
     money_image = pygame.transform.scale(money_image, (100, 100))
@@ -64,6 +64,11 @@ if __name__ == '__main__':
     base_hp = 5
     base_image = load_image('heart.png')
     base_image = pygame.transform.scale(base_image, (80, 60))
+
+    light = load_image('light.png')
+    light = pygame.transform.scale(light, (160, 150))
+    light.set_alpha(200)
+    is_fade_out = True
 
     bullet_turret = pygame.transform.scale(turret_images['bullet'], (60, 75))
     laser_turret = pygame.transform.scale(turret_images['laser'], (60, 75))
@@ -73,14 +78,13 @@ if __name__ == '__main__':
     turret_names = ['laser', 'bullet', 'rocket']
     active_type = 1
 
-    time_before_start = 30
+    time_before_start = 25
     time_after_start = 145
     pygame.time.set_timer(COUNT_TIME, 1000)
 
     counter_spawn = 0
     clock = pygame.time.Clock()
     while True:
-
         # отрисовка спрайтов
         tiles_group.draw(screen)
         turret_group.draw(screen)
@@ -114,6 +118,19 @@ if __name__ == '__main__':
         pygame.draw.line(screen, 'black', (395, 595), (395, 680), 2)
         pygame.draw.line(screen, 'black', (565, 595), (565, 680), 2)
 
+        # красный свет
+        if time_before_start > 0:
+            if is_fade_out:
+                light.set_alpha(light.get_alpha() - 2)
+            else:
+                light.set_alpha(light.get_alpha() + 2)
+            if light.get_alpha() < 100:
+                is_fade_out = False
+            elif light.get_alpha() > 200:
+                is_fade_out = True
+
+            screen.blit(light, (-80, 300))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -128,6 +145,7 @@ if __name__ == '__main__':
                             line = ' '.join(lvl[coord[0]]).split()
                             line[coord[1]] = '?'
                             lvl[coord[0]] = ''.join(line)
+                            turret.play_base_sound()
                         else:
                             turret_group.remove(turret)  # нет денег - нет турели
 

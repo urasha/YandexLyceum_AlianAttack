@@ -40,7 +40,7 @@ class Enemy(pygame.sprite.Sprite):
             (self.rect.x + 306, self.rect.y - 114): (0, -self.dx, 90),
             (self.rect.x + 306, self.rect.y - 240): (self.dx, 0, 0),
             (self.rect.x + 1001, self.rect.y - 240): (self.dx, 0, 0)
-        }  # костыль - ПОТОМ МБ ИСПРАВИТЬ
+        }
         self.counter_pos = 0
 
     def move_enemy(self):
