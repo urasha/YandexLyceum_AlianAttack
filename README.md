@@ -1,6 +1,4 @@
 # YandexLyceum_AlianAttack
-Tower defense on pygame
-
 <b>Управление:<b> <br>
   <ul>
     <li>
