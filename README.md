@@ -1,5 +1,5 @@
 # YandexLyceum_AlianAttack
-Чтобы начать, запустите файл main.py
+Чтобы начать, запустите файл main.py <br>
 <b>Управление:<b> <br>
   <ul>
     <li>
