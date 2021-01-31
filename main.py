@@ -78,10 +78,11 @@ if __name__ == '__main__':
     turret_names = ['laser', 'bullet', 'rocket']
     active_type = 1
 
-    time_before_start = 25
+    time_before_start = 15
     time_after_start = 145
     pygame.time.set_timer(COUNT_TIME, 1000)
 
+    is_spawn = False
     counter_spawn = 0
     clock = pygame.time.Clock()
     while True:
@@ -92,6 +93,7 @@ if __name__ == '__main__':
 
         if time_before_start > 0:
             screen.blit(font_2.render(f'До начала: {time_before_start} сек', True, 'black'), (20, 20))
+        elif time_before_start == 0:
             pygame.time.set_timer(SPAWN_GROUP, 6500)
 
         elif 145 >= time_after_start > -1:
