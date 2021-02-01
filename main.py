@@ -78,7 +78,7 @@ if __name__ == '__main__':
     turret_names = ['laser', 'bullet', 'rocket']
     active_type = 1
 
-    time_before_start = 15
+    time_before_start = 1
     time_after_start = 145
     pygame.time.set_timer(COUNT_TIME, 1000)
 
@@ -88,7 +88,6 @@ if __name__ == '__main__':
     while True:
         # отрисовка спрайтов
         tiles_group.draw(screen)
-        turret_group.draw(screen)
         enemy_group.draw(screen)
 
         if time_before_start > 0:
@@ -167,19 +166,18 @@ if __name__ == '__main__':
                 time_after_start -= 1
 
             if event.type == SPAWN_GROUP:
-                counter_spawn = random.randint(3, 8 if pygame.time.get_ticks() > 30000 else 6)
+                counter_spawn = random.randint(3, 8 if time_after_start < 60 else 4)
                 pygame.time.set_timer(SPAWN_ENEMY, 2000 // counter_spawn)
 
             if event.type == SPAWN_ENEMY:
                 if counter_spawn > 0:
-                    chance_sprinter = 25 if pygame.time.get_ticks() < 60000 else 35
-                    Enemy('sprinter' if secrets.randbelow(100) < chance_sprinter else 'usual')
+                    Enemy('sprinter' if secrets.randbelow(100) < 25 else 'usual')
                     counter_spawn -= 1
 
             # события стрельбы
             for j in shooting_events:
                 if j == event.type:
-                    check_shooting(shooting_events[j])
+                    check_shooting(shooting_events[j], screen)
 
         # проверка на проигрыш
         check_game_state(base_hp, 'Поражение')
@@ -205,6 +203,9 @@ if __name__ == '__main__':
             base_hp -= i.change_position()
             i.move_enemy()
             i.draw_hp_bar(screen)
+
+        # отрисовка турели
+        turret_group.draw(screen)
 
         clock.tick(FPS)
         pygame.display.flip()

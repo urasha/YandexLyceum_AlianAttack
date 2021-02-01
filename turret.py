@@ -30,7 +30,7 @@ def get_cell(height, width, mouse_pos):
                 return i, j
 
 
-def check_shooting(t_type):
+def check_shooting(t_type, screen):
     """Проверка на необходимость выстрела"""
     for t in [i for i in turret_group if i.t_type == t_type]:
         try:
@@ -38,6 +38,7 @@ def check_shooting(t_type):
         except Exception:
             continue
         t.sound.play()
+        t.play_animation(screen, (enemy.rect.x, enemy.rect.y))
         enemy.take_damage(t.damage)
 
 
@@ -106,6 +107,9 @@ class BulletTurret(Turret):
         self.sound.set_volume(0.2)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 125)
 
+    def play_animation(self):
+        pass
+
 
 class RocketTurret(Turret):
     def __init__(self, pos_x, pos_y, turret_type):
@@ -117,6 +121,9 @@ class RocketTurret(Turret):
         self.sound.set_volume(0.3)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 450)
 
+    def play_animation(self):
+        pass
+
 
 class LaserTurret(Turret):
     def __init__(self, pos_x, pos_y, turret_type):
@@ -127,3 +134,7 @@ class LaserTurret(Turret):
         self.sound = pygame.mixer.Sound('sounds/laser_sound.wav')
         self.sound.set_volume(0.5)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 80)
+
+    def play_animation(self, screen, xy):
+        x, y, w, h = self.rect
+        pygame.draw.line(screen, 'red', (x + w // 2, y + h // 2), (xy[0], xy[1]), width=3)
