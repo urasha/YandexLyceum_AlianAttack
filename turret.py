@@ -30,16 +30,29 @@ def get_cell(height, width, mouse_pos):
                 return i, j
 
 
+def distance(x1, y1, x2, y2):
+    """Определение расстояния от врага до турели"""
+    return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+
 def check_shooting(t_type, screen):
     """Проверка на необходимость выстрела"""
     for t in [i for i in turret_group if i.t_type == t_type]:
+        enemies = []
         try:
             enemy = t.check_area()[2]
+            enemies.append(enemy)
+            if t_type == 'rocket':
+                for i in enemy_group:
+                    if distance(enemy.rect.x, enemy.rect.y, i.rect.x, i.rect.y) <= 60:
+                        enemies.append(i)
         except Exception:
             continue
         t.sound.play()
-        t.play_animation(screen, (enemy.rect.x, enemy.rect.y))
-        enemy.take_damage(t.damage)
+        for j in enemies:
+            j.take_damage(t.damage)
+        if t_type == 'laser':
+            t.play_animation(screen, (enemy.rect.x, enemy.rect.y))
 
 
 class Turret(pygame.sprite.Sprite):
@@ -81,13 +94,8 @@ class Turret(pygame.sprite.Sprite):
         sprites = enemy_group.sprites()
 
         for i in sprites:
-            if self._distance(turret_center[0], turret_center[1], i.rect.x, i.rect.y) <= self.radius:
+            if distance(turret_center[0], turret_center[1], i.rect.x, i.rect.y) <= self.radius:
                 return i.rect.x, i.rect.y, i
-
-    @staticmethod
-    def _distance(x1, y1, x2, y2):
-        """Определение расстояния от врага до турели"""
-        return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
     @staticmethod
     def play_base_sound():
@@ -100,15 +108,12 @@ class Turret(pygame.sprite.Sprite):
 class BulletTurret(Turret):
     def __init__(self, pos_x, pos_y, turret_type):
         super().__init__(pos_x, pos_y, turret_type)
-        self.radius = 100
+        self.radius = 110
         self.price = 70
         self.damage = 3
         self.sound = pygame.mixer.Sound('sounds/bullet_sound.wav')
         self.sound.set_volume(0.2)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 125)
-
-    def play_animation(self):
-        pass
 
 
 class RocketTurret(Turret):
@@ -116,13 +121,10 @@ class RocketTurret(Turret):
         super().__init__(pos_x, pos_y, turret_type)
         self.radius = 150
         self.price = 120
-        self.damage = 7
+        self.damage = 6
         self.sound = pygame.mixer.Sound('sounds/rocket_sound.wav')
         self.sound.set_volume(0.3)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 450)
-
-    def play_animation(self):
-        pass
 
 
 class LaserTurret(Turret):

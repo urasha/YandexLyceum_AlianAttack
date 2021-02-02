@@ -78,11 +78,14 @@ if __name__ == '__main__':
     turret_names = ['laser', 'bullet', 'rocket']
     active_type = 1
 
+    silver_bullet = load_image('silver_bullet.png')
+
     time_before_start = 1
     time_after_start = 145
     pygame.time.set_timer(COUNT_TIME, 1000)
 
     is_spawn = False
+    is_see_radius = False
     counter_spawn = 0
     clock = pygame.time.Clock()
     while True:
@@ -160,6 +163,12 @@ if __name__ == '__main__':
                     active_type = 2
                 elif event.key == pygame.K_ESCAPE:
                     start_menu(screen)
+                elif event.key == pygame.K_SPACE:
+                    is_see_radius = True
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    is_see_radius = False
 
             if event.type == COUNT_TIME:
                 time_before_start -= 1
@@ -184,6 +193,12 @@ if __name__ == '__main__':
 
         # проверка на победу
         check_game_state(time_after_start, 'Вы победили!')
+
+        # отрисовка радиусов
+        if is_see_radius:
+            for i in turret_group:
+                pygame.draw.circle(screen, 'red', (i.rect.x + i.rect.width // 2,
+                                                   i.rect.y + i.rect.height // 2), i.radius, width=2)
 
         # поворот турелей к врагам
         for i in turret_group:
