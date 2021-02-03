@@ -140,6 +140,7 @@ if __name__ == '__main__':
                 terminate()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 coord = get_cell(len(lvl), len(lvl[0]), event.pos)
+                # устновка турели
                 if event.button == 1:
                     # есть ли место для турели?
                     if lvl[coord[0]][coord[1]] == '@':
@@ -152,6 +153,16 @@ if __name__ == '__main__':
                             turret.play_base_sound()
                         else:
                             turret_group.remove(turret)  # нет денег - нет турели
+                # удаление турели
+                if event.button == 3:
+                    if lvl[coord[0]][coord[1]] == '?':
+                        player_money += 40
+                        line = ' '.join(lvl[coord[0]]).split()
+                        line[coord[1]] = '@'
+                        lvl[coord[0]] = ''.join(line)
+                        for i in turret_group:
+                            if i.lvl_coord == (coord[0], coord[1]):
+                                turret_group.remove(i)
 
             # смена турелей
             if event.type == pygame.KEYDOWN:
@@ -165,8 +176,6 @@ if __name__ == '__main__':
                     start_menu(screen)
                 elif event.key == pygame.K_SPACE:
                     is_see_radius = True
-                elif event.key == pygame.K_BACKSLASH:
-                    Enemy('usual')
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_SPACE:

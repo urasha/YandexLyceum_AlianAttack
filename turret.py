@@ -48,9 +48,12 @@ def check_shooting(t_type, screen):
                         enemies.append(i)
         except Exception:
             continue
+
         t.sound.play()
+
         for j in enemies:
             j.take_damage(t.damage)
+
         if t_type == 'laser':
             t.play_animation(screen, (enemy.rect.x, enemy.rect.y))
 
@@ -59,6 +62,7 @@ class Turret(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, turret_type):
         super().__init__(turret_group)
         self.t_type = turret_type
+        self.lvl_coord = (pos_x, pos_y)
         self.image = turret_images[turret_type]
         self.image = pygame.transform.scale(self.image, (WIDTH, HEIGHT))
         self.original_image = self.image
