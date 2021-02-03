@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     silver_bullet = load_image('silver_bullet.png')
 
-    time_before_start = 1
+    time_before_start = 20
     time_after_start = 145
     pygame.time.set_timer(COUNT_TIME, 1000)
 
@@ -165,6 +165,8 @@ if __name__ == '__main__':
                     start_menu(screen)
                 elif event.key == pygame.K_SPACE:
                     is_see_radius = True
+                elif event.key == pygame.K_BACKSLASH:
+                    Enemy('usual')
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_SPACE:
@@ -175,8 +177,15 @@ if __name__ == '__main__':
                 time_after_start -= 1
 
             if event.type == SPAWN_GROUP:
-                counter_spawn = random.randint(3, 8 if time_after_start < 60 else 4)
-                pygame.time.set_timer(SPAWN_ENEMY, 2000 // counter_spawn)
+                num = 4
+                if time_after_start < 80:
+                    num = 6
+                elif time_after_start < 50:
+                    num = 8
+                elif time_after_start < 20:
+                    num = 10
+                counter_spawn = random.randint(3, num)
+                pygame.time.set_timer(SPAWN_ENEMY, 2500 // counter_spawn)
 
             if event.type == SPAWN_ENEMY:
                 if counter_spawn > 0:

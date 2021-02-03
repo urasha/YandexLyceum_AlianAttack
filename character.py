@@ -15,7 +15,7 @@ enemy_images = {
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, enemy_type):
         super().__init__(enemy_group)
-        self.ORIG_HP = 25 if enemy_type == 'sprinter' else 35
+        self.ORIG_HP = 28 if enemy_type == 'sprinter' else 40
         self.hp = self.ORIG_HP
         self.award = 10 if enemy_type == 'sprinter' else 6
         self.image = enemy_images[enemy_type]

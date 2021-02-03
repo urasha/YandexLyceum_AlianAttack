@@ -110,7 +110,7 @@ class BulletTurret(Turret):
         super().__init__(pos_x, pos_y, turret_type)
         self.radius = 110
         self.price = 70
-        self.damage = 3
+        self.damage = 4
         self.sound = pygame.mixer.Sound('sounds/bullet_sound.wav')
         self.sound.set_volume(0.2)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 125)
@@ -121,7 +121,7 @@ class RocketTurret(Turret):
         super().__init__(pos_x, pos_y, turret_type)
         self.radius = 150
         self.price = 120
-        self.damage = 6
+        self.damage = 7
         self.sound = pygame.mixer.Sound('sounds/rocket_sound.wav')
         self.sound.set_volume(0.3)
         pygame.time.set_timer(pygame.USEREVENT + self.counter, 450)
