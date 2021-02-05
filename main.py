@@ -78,8 +78,6 @@ if __name__ == '__main__':
     turret_names = ['laser', 'bullet', 'rocket']
     active_type = 1
 
-    silver_bullet = load_image('silver_bullet.png')
-
     time_before_start = 20
     time_after_start = 145
     pygame.time.set_timer(COUNT_TIME, 1000)
