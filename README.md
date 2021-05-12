@@ -4,6 +4,7 @@
 `git clone https://github.com/urasha/YandexLyceum_AlianAttack/`<br>
 <br>
 Чтобы начать, запустите файл <b>main.py<b> <br>
+  <br>
 <b>Управление:<b> <br>
   <ul>
     <li>
