@@ -1,5 +1,5 @@
 # YandexLyceum_AlianAttack
-Скачайте проект с помощью кнопки Code -> 
+Скачайте проект с помощью кнопки Code -> Download Zip <br>
 Чтобы начать, запустите файл main.py <br>
 <b>Управление:<b> <br>
   <ul>
