@@ -1,5 +1,6 @@
 # YandexLyceum_AlianAttack
-Скачайте проект с помощью кнопки Code -> Download Zip или командой git clone https://github.com/urasha/YandexLyceum_AlianAttack/ <br>
+Скачайте проект с помощью кнопки Code -> Download Zip или <br>
+    git clone https://github.com/urasha/YandexLyceum_AlianAttack/ <br>
 Чтобы начать, запустите файл <b>main.py<b> <br>
 <b>Управление:<b> <br>
   <ul>
